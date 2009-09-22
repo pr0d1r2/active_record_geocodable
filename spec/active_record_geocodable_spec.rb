@@ -10,25 +10,29 @@ describe GeocodableModel do
 
   before(:each) do
     @geocodable_model = GeocodableModel.new
+    @geocoder = mock(Geokit::Geocoders::MultiGeocoder)
   end
 
-  it 'geo should return geocoded address from multigeocoder' do
-    @geocodable_model.should_receive(:address).and_return(:address)
-    Geokit::Geocoders::MultiGeocoder.should_receive(:geocode).with(:address).and_return(:geo)
+  it 'geo should return geocoded complete_address from multigeocoder' do
+    @geocoder.should_receive(:geocode).with(:complete_address).and_return(:geo)
+    @geocodable_model.should_receive(:geocoder).and_return(@geocoder)
+    @geocodable_model.should_receive(:complete_address).and_return(:complete_address)
     @geocodable_model.geo.should == :geo
   end
 
   describe 'geocoding_occured?' do
     it 'should be true when geocoding occured' do
-      Geokit::Geocoders::MultiGeocoder.should_receive(:geocode).and_return(:geo)
-      @geocodable_model.stub!(:address)
+      @geocoder.should_receive(:geocode).and_return(:geo)
+      @geocodable_model.should_receive(:geocoder).and_return(@geocoder)
+      @geocodable_model.stub!(:complete_address)
       @geocodable_model.geo
       @geocodable_model.geocoding_occured?.should be_true
     end
 
     it 'should be false when geocoding not occured' do
-      Geokit::Geocoders::MultiGeocoder.should_receive(:geocode).and_return(nil)
-      @geocodable_model.stub!(:address)
+      @geocoder.should_receive(:geocode).and_return(nil)
+      @geocodable_model.should_receive(:geocoder).and_return(@geocoder)
+      @geocodable_model.stub!(:complete_address)
       @geocodable_model.geo
       @geocodable_model.geocoding_occured?.should be_false
     end
@@ -75,6 +79,10 @@ describe GeocodableModel do
       @geocodable_model.should_receive(:lat?).and_return(false)
       @geocodable_model.geocoded?.should be_false
     end
+  end
+
+  it 'geocoder should return Geokit::Geocoders::MultiGeocoder' do
+    @geocodable_model.geocoder.should == Geokit::Geocoders::MultiGeocoder
   end
 
 end

@@ -5,7 +5,7 @@ module ActiveRecord
     module Model
 
       def geo
-        @geo ||= Geokit::Geocoders::MultiGeocoder.geocode(address)
+        @geo ||= geocoder.geocode(complete_address)
       end
 
       def geocoding_occured?
@@ -22,6 +22,10 @@ module ActiveRecord
 
       def geocoded?
         lat? && lng?
+      end
+
+      def geocoder
+        Geokit::Geocoders::MultiGeocoder
       end
 
     end
