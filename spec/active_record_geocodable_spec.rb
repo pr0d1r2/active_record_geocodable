@@ -58,22 +58,22 @@ describe GeocodableModel do
     end
   end
 
-  describe 'success?' do
+  describe 'geocoded?' do
     it 'should be true when lat and lng are ok' do
       @geocodable_model.should_receive(:lat?).and_return(true)
       @geocodable_model.should_receive(:lng?).and_return(true)
-      @geocodable_model.success?.should be_true
+      @geocodable_model.geocoded?.should be_true
     end
 
     it 'should be false when lng is not ok' do
       @geocodable_model.should_receive(:lat?).and_return(true)
       @geocodable_model.should_receive(:lng?).and_return(false)
-      @geocodable_model.success?.should be_false
+      @geocodable_model.geocoded?.should be_false
     end
 
     it 'should be false when lat is not ok' do
       @geocodable_model.should_receive(:lat?).and_return(false)
-      @geocodable_model.success?.should be_false
+      @geocodable_model.geocoded?.should be_false
     end
   end
 

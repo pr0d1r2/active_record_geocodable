@@ -20,7 +20,7 @@ module ActiveRecord
         !lng.nil?
       end
 
-      def success?
+      def geocoded?
         lat? && lng?
       end
 
