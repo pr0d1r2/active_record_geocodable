@@ -241,7 +241,7 @@ describe GeocodableModelWithRequire do
 
   before(:each) do
     @geocodable_model = GeocodableModelWithRequire.new(:lat => 84, :lng => 72)
-    @geocodable_model.should_receive(:geocode_complete_address).and_return(true)
+    @geocodable_model.stub!(:geocode_complete_address).and_return(true)
   end
 
   it 'should be valid with all ok' do
@@ -265,6 +265,11 @@ describe GeocodableModelWithRequire do
 
   it 'should not be valid with not numeric lng' do
     @geocodable_model.lng = 'a'
+    @geocodable_model.should_not be_valid
+  end
+
+  it 'should not be valid when geocode_complete_address was not successful' do
+    @geocodable_model.should_receive(:geocode_complete_address).and_return(false)
     @geocodable_model.should_not be_valid
   end
 
