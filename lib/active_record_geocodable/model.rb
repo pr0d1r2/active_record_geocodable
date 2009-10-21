@@ -5,7 +5,7 @@ module ActiveRecord
     module Model
 
       def geo
-        @geo ||= geocoder.geocode(complete_address)
+        @geo ||= geocoder.geocode(downcase_complete_address)
       end
 
       def geocoding_occured?
@@ -69,6 +69,10 @@ module ActiveRecord
 
       def geocode?
         true
+      end
+
+      def downcase_complete_address
+        complete_address.downcase
       end
 
     end

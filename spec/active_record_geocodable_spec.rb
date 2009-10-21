@@ -26,25 +26,26 @@ describe GeocodableModel do
   end
 
   it 'geo should return geocoded complete_address from multigeocoder' do
-    @geocoder.should_receive(:geocode).with(:complete_address).and_return(:geo)
+    @geocoder.should_receive(:geocode).with(:downcase_complete_address).and_return(:geo)
     @geocodable_model.should_receive(:geocoder).and_return(@geocoder)
-    @geocodable_model.should_receive(:complete_address).and_return(:complete_address)
+    @geocodable_model.should_receive(:downcase_complete_address).and_return(:downcase_complete_address)
     @geocodable_model.geo.should == :geo
   end
 
   describe 'geocoding_occured?' do
+    before(:each) do
+      @geocodable_model.should_receive(:geocoder).and_return(@geocoder)
+      @geocodable_model.stub!(:downcase_complete_address)
+    end
+
     it 'should be true when geocoding occured' do
       @geocoder.should_receive(:geocode).and_return(:geo)
-      @geocodable_model.should_receive(:geocoder).and_return(@geocoder)
-      @geocodable_model.stub!(:complete_address)
       @geocodable_model.geo
       @geocodable_model.geocoding_occured?.should be_true
     end
 
     it 'should be false when geocoding not occured' do
       @geocoder.should_receive(:geocode).and_return(nil)
-      @geocodable_model.should_receive(:geocoder).and_return(@geocoder)
-      @geocodable_model.stub!(:complete_address)
       @geocodable_model.geo
       @geocodable_model.geocoding_occured?.should be_false
     end
