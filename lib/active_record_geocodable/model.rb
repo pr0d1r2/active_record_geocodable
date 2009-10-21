@@ -17,11 +17,11 @@ module ActiveRecord
       end
 
       def lat?
-        !lat.nil?
+        !lat.blank?
       end
 
       def lng?
-        !lng.nil?
+        !lng.blank?
       end
 
       def geocoded?
